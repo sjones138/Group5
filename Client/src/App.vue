@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { QTable } from 'quasar';
 
 const items = ref([]);
 const newItem = ref({ name: '', price: 0, description: '' });
@@ -27,20 +28,33 @@ const addItem = async () => {
     console.error('Error adding item:', error);
   }
 };
+
+const columns = [
+  { name: 'name', required: true, label: 'Name', align: 'left', field: row => row.name, format: val => `${val}`, sortable: true },
+  { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
+  { name: 'description', align: 'left', label: 'Description', field: 'description', sortable: true }
+];
 </script>
 
 <template>
-  <div>
-    <h1>Items</h1>
-    <ul>
-      <li v-for="item in items" :key="item._id">{{ item.name }} - {{ item.price }} - {{ item.description }}</li>
-    </ul>
-    <h2>Add New Item</h2>
-    <form @submit.prevent="addItem">
-      <input v-model="newItem.name" placeholder="Name" required />
-      <input v-model="newItem.price" type="number" placeholder="Price" required />
-      <input v-model="newItem.description" placeholder="Description" />
-      <button type="submit">Add Item</button>
-    </form>
-  </div>
+  <v-row>
+    <v-col cols="12">
+      <h1 class="py-20">Items</h1>
+      <div style="padding: 20px 0;">
+        <q-table
+            title="Items Available"
+            :rows="items"
+            :columns="columns"
+            row-key="name"
+        />
+      </div>
+      <h2>Add New Item</h2>
+      <form @submit.prevent="addItem">
+        <input v-model="newItem.name" placeholder="Name" required />
+        <input v-model="newItem.price" type="number" placeholder="Price" required />
+        <input v-model="newItem.description" placeholder="Description" />
+        <button type="submit">Add Item</button>
+      </form>
+    </v-col>
+  </v-row>
 </template>
