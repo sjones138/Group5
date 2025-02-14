@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { QTable } from 'quasar';
+import { QTable, QBtn } from 'quasar';
 
 const items = ref([]);
 const newItem = ref({ name: '', price: 0, description: '' });
@@ -29,10 +29,25 @@ const addItem = async () => {
   }
 };
 
+const editItem = async (item) => {
+  // Implement the logic to edit the item
+  console.log('Edit item:', item);
+};
+
+const deleteItem = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5001/api/items/${id}`);
+    items.value = items.value.filter(item => item._id !== id);
+  } catch (error) {
+    console.error('Error deleting item:', error);
+  }
+};
+
 const columns = [
   { name: 'name', required: true, label: 'Name', align: 'left', field: row => row.name, format: val => `${val}`, sortable: true },
   { name: 'price', align: 'center', label: 'Price', field: 'price', sortable: true },
-  { name: 'description', align: 'left', label: 'Description', field: 'description', sortable: true }
+  { name: 'description', align: 'left', label: 'Description', field: 'description', sortable: true },
+  { name: 'actions', align: 'center', label: 'Actions', field: 'actions' }
 ];
 </script>
 
@@ -46,7 +61,12 @@ const columns = [
             :rows="items"
             :columns="columns"
             row-key="name"
-        />
+        >
+          <template v-slot:body-cell-actions="props">
+            <q-btn flat round icon="edit" @click="editItem(props.row)" />
+            <q-btn flat round icon="delete" color="red" @click="deleteItem(props.row._id)" />
+          </template>
+        </q-table>
       </div>
       <h2>Add New Item</h2>
       <form @submit.prevent="addItem">
