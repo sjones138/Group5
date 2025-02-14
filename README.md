@@ -27,11 +27,12 @@ npm install
 
 ## Environment Variables
 
-Create a `.env` file in the `Backend` directory and add the connection string:
+Create a `.env` file in the `Backend` directory and add your MongoDB Cluster connection string:
 
+Should be in this format...(this is NOT a real connection string)
+for access to G5 Cluster please message seanjonze@gmail.com
 ```plaintext
-VUE_APP_API_URL=http://localhost:5001/api
-```
+MONGODB_URI=mongodb+srv://shawnjones:nicdsoi;vn;iosadniovndsianv jknds```
 
 ## Run the Development Server
 
